@@ -8,9 +8,15 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleRegister = () => {
+    // Validate form fields
+    if (!email || !username || !password || !confirmPassword) {
+      Alert.alert('Please fill in all fields');
+      return;
+    }
+
     // Create an object with the user's credentials
     const credentials = {
-      email : email,
+      email: email,
       username: username,
       password: password,
       confirmPassword: confirmPassword,
@@ -27,10 +33,10 @@ const Register = () => {
       .then((response) => {
         if (response.ok) {
           // Successful login
-          Alert.alert('Login successful');
+          Alert.alert('Registration successful');
         } else {
           // Failed login
-          Alert.alert('Login failed');
+          Alert.alert('Registration failed');
         }
       })
       .catch((error) => {
@@ -39,37 +45,37 @@ const Register = () => {
       });
   };
 
-  const routeRegister = () => {
-    navigation.navigate('Login');
-  }
-
   return (
-    <View style={{padding: 50}}>
+    <View style={{ padding: 50 }}>
       <TextInput
-        style={{height: 40, fontSize: 20}}
+        style={{ height: 40, fontSize: 20 }}
         placeholder="Email"
         value={email}
         onChangeText={(text) => setEmail(text)}
+        required
       />
       <TextInput
-        style={{height: 40, fontSize: 20}}
+        style={{ height: 40, fontSize: 20 }}
         placeholder="Username"
         value={username}
         onChangeText={(text) => setUsername(text)}
+        required
       />
       <TextInput
-        style={{height: 40, fontSize: 20}}
+        style={{ height: 40, fontSize: 20 }}
         placeholder="Password"
         secureTextEntry
         value={password}
         onChangeText={(text) => setPassword(text)}
+        required
       />
       <TextInput
-        style={{height: 40, fontSize: 20}}
+        style={{ height: 40, fontSize: 20 }}
         placeholder="Confirm Password"
         secureTextEntry
         value={confirmPassword}
         onChangeText={(text) => setConfirmPassword(text)}
+        required
       />
       <Button title="Register" onPress={handleRegister} />
     </View>

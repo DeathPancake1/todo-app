@@ -9,6 +9,12 @@ const Login = () => {
   const navigation = useNavigation();
 
   const handleLogin = () => {
+    // Validate form fields
+    if (!username || !password) {
+      Alert.alert('Please fill in all fields');
+      return;
+    }
+
     // Create an object with the user's credentials
     const credentials = {
       username: username,
@@ -43,19 +49,21 @@ const Login = () => {
   }
 
   return (
-    <View style={{padding: 50}}>
+    <View style={{ padding: 50 }}>
       <TextInput
-        style={{height: 40, fontSize: 20}}
+        style={{ height: 40, fontSize: 20 }}
         placeholder="Username"
         value={username}
         onChangeText={(text) => setUsername(text)}
+        required
       />
       <TextInput
-        style={{height: 40, fontSize: 20}}
+        style={{ height: 40, fontSize: 20 }}
         placeholder="Password"
         secureTextEntry
         value={password}
         onChangeText={(text) => setPassword(text)}
+        required
       />
       <Button title="Login" onPress={handleLogin} />
       <Button title="SignUp" onPress={routeRegister} />
