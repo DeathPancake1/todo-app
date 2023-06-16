@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const navigation = useNavigation();
 
   const handleRegister = () => {
     // Validate form fields
@@ -19,11 +22,10 @@ const Register = () => {
       email: email,
       username: username,
       password: password,
-      confirmPassword: confirmPassword,
     };
 
     // Make the HTTP POST request
-    fetch('https://example.com/login', {
+    fetch('http://192.168.1.13:3000/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -34,6 +36,7 @@ const Register = () => {
         if (response.ok) {
           // Successful registration
           Alert.alert('Registration successful');
+          navigation.goBack();
         } else {
           // Failed registration
           Alert.alert('Registration failed');

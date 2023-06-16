@@ -25,11 +25,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = __importStar(require("react"));
 const react_native_1 = require("react-native");
+const native_1 = require("@react-navigation/native");
 const Register = () => {
     const [username, setUsername] = (0, react_1.useState)('');
     const [password, setPassword] = (0, react_1.useState)('');
     const [email, setEmail] = (0, react_1.useState)('');
     const [confirmPassword, setConfirmPassword] = (0, react_1.useState)('');
+    const navigation = (0, native_1.useNavigation)();
     const handleRegister = () => {
         // Validate form fields
         if (!email || !username || !password || !confirmPassword) {
@@ -41,10 +43,9 @@ const Register = () => {
             email: email,
             username: username,
             password: password,
-            confirmPassword: confirmPassword,
         };
         // Make the HTTP POST request
-        fetch('https://example.com/login', {
+        fetch('http://192.168.1.13:3000/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -55,6 +56,7 @@ const Register = () => {
             if (response.ok) {
                 // Successful registration
                 react_native_1.Alert.alert('Registration successful');
+                navigation.goBack();
             }
             else {
                 // Failed registration
