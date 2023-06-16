@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+const BASE_URL = 'http://192.168.1.13:3000';
+
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -16,6 +18,16 @@ const Register = () => {
       Alert.alert('Please fill in all fields');
       return;
     }
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    if (!emailRegex.test(email)) {
+      Alert.alert('Invalid email');
+      return
+    }
+    if(password != confirmPassword){
+      Alert.alert("Passwords don't match");
+      return
+    }
 
     // Create an object with the user's credentials
     const credentials = {
@@ -25,7 +37,7 @@ const Register = () => {
     };
 
     // Make the HTTP POST request
-    fetch('http://192.168.1.13:3000/register', {
+    fetch(`${BASE_URL}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -55,6 +67,9 @@ const Register = () => {
         placeholder="Email"
         value={email}
         onChangeText={(text) => setEmail(text)}
+        keyboardType="email-address" // Set keyboard type to email
+        autoCapitalize="none" // Disable auto-capitalization
+        autoComplete="email" // Enable email autocomplete
       />
       <TextInput
         style={{ height: 40, fontSize: 20 }}

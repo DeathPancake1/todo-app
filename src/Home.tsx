@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 let userEmail = '';
+const BASE_URL = 'http://192.168.1.13:3000';
 
 type RootStackParamList = {
   Login: undefined;
@@ -41,7 +42,7 @@ const Home = () => {
 
   const getTodos = () => {
     // Make the HTTP POST request
-    fetch('http://192.168.1.13:3000/todos', {
+    fetch(`${BASE_URL}/todos`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -88,7 +89,7 @@ const Home = () => {
     });
 
     // Make the PUT request to update the todo on the server
-    fetch(`http://192.168.1.13:3000/todos/${id}`, {
+    fetch(`${BASE_URL}/todos/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -141,7 +142,7 @@ const Home = () => {
       return;
     }
     // Make the POST request to add the todo on the server
-    fetch('http://192.168.1.13:3000/addTodo', {
+    fetch(`${BASE_URL}/addTodo`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

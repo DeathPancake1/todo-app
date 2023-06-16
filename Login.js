@@ -30,6 +30,7 @@ const react_1 = __importStar(require("react"));
 const react_native_1 = require("react-native");
 const native_1 = require("@react-navigation/native");
 const async_storage_1 = __importDefault(require("@react-native-async-storage/async-storage"));
+const BASE_URL = 'http://192.168.1.13:3000';
 const Login = () => {
     const [email, setEmail] = (0, react_1.useState)('');
     const [password, setPassword] = (0, react_1.useState)('');
@@ -40,13 +41,18 @@ const Login = () => {
             react_native_1.Alert.alert('Please fill in all fields');
             return;
         }
+        const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (!emailRegex.test(email)) {
+            react_native_1.Alert.alert('Invalid email');
+            return;
+        }
         // Create an object with the user's credentials
         const credentials = {
             email: email,
             password: password,
         };
         // Make the HTTP POST request
-        fetch('http://192.168.1.13:3000/login', {
+        fetch(`${BASE_URL}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -74,7 +80,10 @@ const Login = () => {
         navigation.navigate('Register');
     };
     return (react_1.default.createElement(react_native_1.View, { style: { padding: 50 } },
-        react_1.default.createElement(react_native_1.TextInput, { style: { height: 40, fontSize: 20 }, placeholder: "Email", value: email, onChangeText: (text) => setEmail(text) }),
+        react_1.default.createElement(react_native_1.TextInput, { style: { height: 40, fontSize: 20 }, placeholder: "Email", value: email, onChangeText: (text) => setEmail(text), keyboardType: "email-address" // Set keyboard type to email
+            , autoCapitalize: "none" // Disable auto-capitalization
+            , autoComplete: "email" // Enable email autocomplete
+         }),
         react_1.default.createElement(react_native_1.TextInput, { style: { height: 40, fontSize: 20 }, placeholder: "Password", secureTextEntry: true, value: password, onChangeText: (text) => setPassword(text) }),
         react_1.default.createElement(react_native_1.Button, { title: "Login", onPress: handleLogin }),
         react_1.default.createElement(react_native_1.Button, { title: "SignUp", onPress: routeRegister })));

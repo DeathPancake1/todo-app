@@ -31,6 +31,7 @@ const react_native_1 = require("react-native");
 const native_1 = require("@react-navigation/native");
 const async_storage_1 = __importDefault(require("@react-native-async-storage/async-storage"));
 let userEmail = '';
+const BASE_URL = 'http://192.168.1.13:3000';
 const Home = () => {
     const [todos, setTodos] = (0, react_1.useState)([]);
     const [text, setText] = (0, react_1.useState)('');
@@ -42,7 +43,7 @@ const Home = () => {
     }, [navigation]);
     const getTodos = () => {
         // Make the HTTP POST request
-        fetch('http://192.168.1.13:3000/todos', {
+        fetch(`${BASE_URL}/todos`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -88,7 +89,7 @@ const Home = () => {
             return todo;
         });
         // Make the PUT request to update the todo on the server
-        fetch(`http://192.168.1.13:3000/todos/${id}`, {
+        fetch(`${BASE_URL}/todos/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -125,8 +126,12 @@ const Home = () => {
         return 0; // both a and b have the same completion status
     });
     const handleAddTodo = () => {
+        if (!text) {
+            react_native_1.Alert.alert('Please fill in Todo name');
+            return;
+        }
         // Make the POST request to add the todo on the server
-        fetch('http://192.168.1.13:3000/addTodo', {
+        fetch(`${BASE_URL}/addTodo`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

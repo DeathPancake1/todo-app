@@ -9,7 +9,7 @@ type RootStackParamList = {
   Register: undefined;
   Home: undefined;
 };
-
+const BASE_URL = 'http://192.168.1.13:3000';
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
 const Login = () => {
@@ -24,6 +24,12 @@ const Login = () => {
       Alert.alert('Please fill in all fields');
       return;
     }
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    if (!emailRegex.test(email)) {
+      Alert.alert('Invalid email');
+      return
+    }
 
     // Create an object with the user's credentials
     const credentials = {
@@ -32,7 +38,7 @@ const Login = () => {
     };
 
     // Make the HTTP POST request
-    fetch('http://192.168.1.13:3000/login', {
+    fetch(`${BASE_URL}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -67,6 +73,9 @@ const Login = () => {
         placeholder="Email"
         value={email}
         onChangeText={(text) => setEmail(text)}
+        keyboardType="email-address" // Set keyboard type to email
+        autoCapitalize="none" // Disable auto-capitalization
+        autoComplete="email" // Enable email autocomplete
       />
       <TextInput
         style={{ height: 40, fontSize: 20 }}
