@@ -2,35 +2,37 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, Alert } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type RootStackParamList = {
   Login: undefined;
   Register: undefined;
+  Home: undefined;
 };
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation<LoginScreenNavigationProp>();
 
   const handleLogin = () => {
     // Validate form fields
-    if (!username || !password) {
+    if (!email || !password) {
       Alert.alert('Please fill in all fields');
       return;
     }
 
     // Create an object with the user's credentials
     const credentials = {
-      username: username,
+      email: email,
       password: password,
     };
 
     // Make the HTTP POST request
-    fetch('https://example.com/login', {
+    fetch('http://192.168.1.13:3000/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -39,8 +41,10 @@ const Login = () => {
     })
       .then((response) => {
         if (response.ok) {
-          // Successful login
-          Alert.alert('Login successful');
+          AsyncStorage.setItem('userEmail', email) // Set user email in local storage
+          .then(() => {
+            navigation.navigate('Home');
+          });
         } else {
           // Failed login
           Alert.alert('Login failed');
@@ -60,9 +64,9 @@ const Login = () => {
     <View style={{ padding: 50 }}>
       <TextInput
         style={{ height: 40, fontSize: 20 }}
-        placeholder="Username"
-        value={username}
-        onChangeText={(text) => setUsername(text)}
+        placeholder="Email"
+        value={email}
+        onChangeText={(text) => setEmail(text)}
       />
       <TextInput
         style={{ height: 40, fontSize: 20 }}

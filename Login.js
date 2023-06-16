@@ -22,27 +22,31 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = __importStar(require("react"));
 const react_native_1 = require("react-native");
 const native_1 = require("@react-navigation/native");
+const async_storage_1 = __importDefault(require("@react-native-async-storage/async-storage"));
 const Login = () => {
-    const [username, setUsername] = (0, react_1.useState)('');
+    const [email, setEmail] = (0, react_1.useState)('');
     const [password, setPassword] = (0, react_1.useState)('');
     const navigation = (0, native_1.useNavigation)();
     const handleLogin = () => {
         // Validate form fields
-        if (!username || !password) {
+        if (!email || !password) {
             react_native_1.Alert.alert('Please fill in all fields');
             return;
         }
         // Create an object with the user's credentials
         const credentials = {
-            username: username,
+            email: email,
             password: password,
         };
         // Make the HTTP POST request
-        fetch('https://example.com/login', {
+        fetch('http://192.168.1.13:3000/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -51,8 +55,10 @@ const Login = () => {
         })
             .then((response) => {
             if (response.ok) {
-                // Successful login
-                react_native_1.Alert.alert('Login successful');
+                async_storage_1.default.setItem('userEmail', email) // Set user email in local storage
+                    .then(() => {
+                    navigation.navigate('Home');
+                });
             }
             else {
                 // Failed login
@@ -68,7 +74,7 @@ const Login = () => {
         navigation.navigate('Register');
     };
     return (react_1.default.createElement(react_native_1.View, { style: { padding: 50 } },
-        react_1.default.createElement(react_native_1.TextInput, { style: { height: 40, fontSize: 20 }, placeholder: "Username", value: username, onChangeText: (text) => setUsername(text) }),
+        react_1.default.createElement(react_native_1.TextInput, { style: { height: 40, fontSize: 20 }, placeholder: "Email", value: email, onChangeText: (text) => setEmail(text) }),
         react_1.default.createElement(react_native_1.TextInput, { style: { height: 40, fontSize: 20 }, placeholder: "Password", secureTextEntry: true, value: password, onChangeText: (text) => setPassword(text) }),
         react_1.default.createElement(react_native_1.Button, { title: "Login", onPress: handleLogin }),
         react_1.default.createElement(react_native_1.Button, { title: "SignUp", onPress: routeRegister })));

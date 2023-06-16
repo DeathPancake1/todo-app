@@ -8,11 +8,13 @@ const native_1 = require("@react-navigation/native");
 const stack_1 = require("@react-navigation/stack");
 const Login_1 = __importDefault(require("./Login"));
 const Register_1 = __importDefault(require("./Register"));
+const Home_1 = __importDefault(require("./Home"));
 const Stack = (0, stack_1.createStackNavigator)();
 const App = () => {
     return (react_1.default.createElement(native_1.NavigationContainer, null,
         react_1.default.createElement(Stack.Navigator, { initialRouteName: "Login" },
             react_1.default.createElement(Stack.Screen, { name: "Login", component: Login_1.default }),
-            react_1.default.createElement(Stack.Screen, { name: "Register", component: Register_1.default }))));
+            react_1.default.createElement(Stack.Screen, { name: "Register", component: Register_1.default }),
+            react_1.default.createElement(Stack.Screen, { name: "Home", component: Home_1.default }))));
 };
 exports.default = App;
