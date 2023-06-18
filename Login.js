@@ -22,14 +22,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = __importStar(require("react"));
 const react_native_1 = require("react-native");
 const native_1 = require("@react-navigation/native");
-const async_storage_1 = __importDefault(require("@react-native-async-storage/async-storage"));
 const SecureStore = __importStar(require("expo-secure-store"));
 const BASE_URL = 'http://192.168.1.13:3000';
 const Login = () => {
@@ -64,12 +60,9 @@ const Login = () => {
             if (response.ok) {
                 response.json().then((data) => {
                     const { token } = data; // Extract the token from the response
-                    async_storage_1.default.setItem('userEmail', email) // Set user email in AsyncStorage
+                    SecureStore.setItemAsync('token', token) // Save the token in secure storage
                         .then(() => {
-                        SecureStore.setItemAsync('token', token) // Save the token in secure storage
-                            .then(() => {
-                            navigation.navigate('Home');
-                        });
+                        navigation.navigate('Home');
                     });
                 });
             }

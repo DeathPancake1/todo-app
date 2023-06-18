@@ -31,16 +31,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = __importStar(require("react"));
 const SecureStore = __importStar(require("expo-secure-store"));
 const react_native_1 = require("react-native");
 const native_1 = require("@react-navigation/native");
-const async_storage_1 = __importDefault(require("@react-native-async-storage/async-storage"));
-let userEmail = '';
 const BASE_URL = 'http://192.168.1.13:3000';
 const Home = () => {
     const [todos, setTodos] = (0, react_1.useState)([]);
@@ -61,8 +56,7 @@ const Home = () => {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `${token}`,
-                },
-                body: JSON.stringify({ email: userEmail }),
+                }
             })
                 .then((response) => {
                 if (response.ok) {
@@ -87,17 +81,7 @@ const Home = () => {
         }
     });
     (0, react_1.useEffect)(() => {
-        // Retrieve the value from AsyncStorage
-        async_storage_1.default.getItem('userEmail')
-            .then((value) => {
-            if (value !== null) {
-                userEmail = value;
-                getTodos();
-            }
-        })
-            .catch((error) => {
-            console.error('Error retrieving value:', error);
-        });
+        getTodos();
     }, []);
     const toggleTodoStatus = (id) => __awaiter(void 0, void 0, void 0, function* () {
         var _a;
@@ -159,7 +143,7 @@ const Home = () => {
                 'Content-Type': 'application/json',
                 'Authorization': `${token}`,
             },
-            body: JSON.stringify({ email: userEmail, todoName: text }),
+            body: JSON.stringify({ todoName: text }),
         })
             .then((response) => {
             if (!response.ok) {

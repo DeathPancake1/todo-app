@@ -4,12 +4,12 @@
 
 The front-end of a todo list application. A centralized server holds the user's data, the user must login to an account.
 It was developed using typescript for strong types and connects to a server running before starting.
-The user creates an account and logs in, they will accept a secure jwt token that is stored in secure local storage and used to fetch their todos each time they request them and update them to avoid unauthorized requests.
+The user creates an account and logs in, they will accept a secure jwt token that is stored in secure local storage and used to fetch their todos each time they request them and update them to avoid unauthorized requests. The user has ability to mark tasks as finished or not finished.
 
 ## Notes
 
 Change BASE_URL variable in files: src/Home.tsx , src/Login.tsx , src/Register.tsx to the url to your local server before running.
-Mine was ```192.168.1.13``` yours will be different.
+Mine was ```192.168.1.13``` yours will be different. You can find your computers ip in the internet properties under ipv4 in the computer running the server code.
 
 ## Technologies
 
@@ -25,7 +25,6 @@ Mine was ```192.168.1.13``` yours will be different.
 - react
 - react native
 - typescript
-- async-storage
 - secure-storage
 
 ## Steps to run (Assumes you are running the [Server](https://github.com/DeathPancake1/todo-app-back-end))

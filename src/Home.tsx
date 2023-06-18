@@ -11,10 +11,8 @@ import {
   Text,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-let userEmail = '';
 const BASE_URL = 'http://192.168.1.13:3000';
 
 type RootStackParamList = {
@@ -52,8 +50,7 @@ const Home = () => {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `${token}`,
-        },
-        body: JSON.stringify({ email: userEmail }),
+        }
       })
         .then((response) => {
           if (response.ok) {
@@ -77,17 +74,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    // Retrieve the value from AsyncStorage
-    AsyncStorage.getItem('userEmail')
-      .then((value) => {
-        if (value !== null) {
-          userEmail = value;
-          getTodos();
-        }
-      })
-      .catch((error) => {
-        console.error('Error retrieving value:', error);
-      });
+    getTodos();
   }, []);
 
   const toggleTodoStatus = async (id: number) => {
@@ -160,7 +147,7 @@ const Home = () => {
         'Content-Type': 'application/json',
         'Authorization': `${token}`,
       },
-      body: JSON.stringify({ email: userEmail, todoName: text }),
+      body: JSON.stringify({ todoName: text }),
     })
       .then((response) => {
         if (!response.ok) {
