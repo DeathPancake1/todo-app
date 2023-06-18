@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "npx tsc && expo start",
+    "start": "npx tsc --project tsconfigcustom.json && expo start && npm run copy-config",
+    "copy-config": "node -e \"require('fs').copyFileSync('tsconfigcustom.json', 'tsconfig.json')\"",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web"
