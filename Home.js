@@ -22,11 +22,21 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = __importStar(require("react"));
+const SecureStore = __importStar(require("expo-secure-store"));
 const react_native_1 = require("react-native");
 const native_1 = require("@react-navigation/native");
 const async_storage_1 = __importDefault(require("@react-native-async-storage/async-storage"));
@@ -41,32 +51,41 @@ const Home = () => {
             headerBackTitle: 'Logout',
         });
     }, [navigation]);
-    const getTodos = () => {
-        // Make the HTTP POST request
-        fetch(`${BASE_URL}/todos`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email: userEmail }), // Pass email as an object
-        })
-            .then((response) => {
-            if (response.ok) {
-                return response.json();
-            }
-            else {
-                throw new Error('Login failed');
-            }
-        })
-            .then((data) => {
-            // Update the todos state with the retrieved todos
-            setTodos(data.todos);
-        })
-            .catch((error) => {
+    const getTodos = () => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            // Retrieve the token from secure storage
+            const token = yield SecureStore.getItemAsync('token');
+            // Make the HTTP POST request with the token in the header
+            fetch(`${BASE_URL}/todos`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${token}`,
+                },
+                body: JSON.stringify({ email: userEmail }),
+            })
+                .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                else {
+                    throw new Error('Login failed');
+                }
+            })
+                .then((data) => {
+                // Update the todos state with the retrieved todos
+                setTodos(data.todos);
+            })
+                .catch((error) => {
+                console.error(error);
+                react_native_1.Alert.alert('An error occurred');
+            });
+        }
+        catch (error) {
             console.error(error);
-            react_native_1.Alert.alert('An error occurred');
-        });
-    };
+            react_native_1.Alert.alert('An error occurred while retrieving the token');
+        }
+    });
     (0, react_1.useEffect)(() => {
         // Retrieve the value from AsyncStorage
         async_storage_1.default.getItem('userEmail')
@@ -80,7 +99,7 @@ const Home = () => {
             console.error('Error retrieving value:', error);
         });
     }, []);
-    const toggleTodoStatus = (id) => {
+    const toggleTodoStatus = (id) => __awaiter(void 0, void 0, void 0, function* () {
         var _a;
         const updatedTodos = todos.map((todo) => {
             if (todo.id === id) {
@@ -88,11 +107,13 @@ const Home = () => {
             }
             return todo;
         });
+        const token = yield SecureStore.getItemAsync('token');
         // Make the PUT request to update the todo on the server
         fetch(`${BASE_URL}/todos/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `${token}`,
             },
             body: JSON.stringify({ finished: (_a = updatedTodos.find((todo) => todo.id === id)) === null || _a === void 0 ? void 0 : _a.finished }),
         })
@@ -106,7 +127,7 @@ const Home = () => {
             react_native_1.Alert.alert('An error occurred');
         });
         setTodos(updatedTodos);
-    };
+    });
     const renderTodoItem = ({ item }) => {
         const toggleStatus = () => {
             toggleTodoStatus(item.id);
@@ -125,16 +146,18 @@ const Home = () => {
         }
         return 0; // both a and b have the same completion status
     });
-    const handleAddTodo = () => {
+    const handleAddTodo = () => __awaiter(void 0, void 0, void 0, function* () {
         if (!text) {
             react_native_1.Alert.alert('Please fill in Todo name');
             return;
         }
+        const token = yield SecureStore.getItemAsync('token');
         // Make the POST request to add the todo on the server
         fetch(`${BASE_URL}/addTodo`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `${token}`,
             },
             body: JSON.stringify({ email: userEmail, todoName: text }),
         })
@@ -151,7 +174,7 @@ const Home = () => {
             console.error(error);
             react_native_1.Alert.alert('An error occurred');
         });
-    };
+    });
     return (react_1.default.createElement(react_native_1.View, { style: styles.container },
         react_1.default.createElement(react_native_1.View, { style: styles.inputContainer },
             react_1.default.createElement(react_native_1.TextInput, { style: styles.textInput, placeholder: "Add Todo!", onChangeText: (newText) => setText(newText), value: text }),

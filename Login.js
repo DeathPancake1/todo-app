@@ -30,6 +30,7 @@ const react_1 = __importStar(require("react"));
 const react_native_1 = require("react-native");
 const native_1 = require("@react-navigation/native");
 const async_storage_1 = __importDefault(require("@react-native-async-storage/async-storage"));
+const SecureStore = __importStar(require("expo-secure-store"));
 const BASE_URL = 'http://192.168.1.13:3000';
 const Login = () => {
     const [email, setEmail] = (0, react_1.useState)('');
@@ -61,9 +62,15 @@ const Login = () => {
         })
             .then((response) => {
             if (response.ok) {
-                async_storage_1.default.setItem('userEmail', email) // Set user email in local storage
-                    .then(() => {
-                    navigation.navigate('Home');
+                response.json().then((data) => {
+                    const { token } = data; // Extract the token from the response
+                    async_storage_1.default.setItem('userEmail', email) // Set user email in AsyncStorage
+                        .then(() => {
+                        SecureStore.setItemAsync('token', token) // Save the token in secure storage
+                            .then(() => {
+                            navigation.navigate('Home');
+                        });
+                    });
                 });
             }
             else {

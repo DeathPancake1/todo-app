@@ -3,6 +3,7 @@ import { View, TextInput, Button, Alert } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 type RootStackParamList = {
   Login: undefined;
@@ -47,9 +48,16 @@ const Login = () => {
     })
       .then((response) => {
         if (response.ok) {
-          AsyncStorage.setItem('userEmail', email) // Set user email in local storage
-          .then(() => {
-            navigation.navigate('Home');
+          response.json().then((data) => {
+            const { token } = data; // Extract the token from the response
+    
+            AsyncStorage.setItem('userEmail', email) // Set user email in AsyncStorage
+              .then(() => {
+                SecureStore.setItemAsync('token', token) // Save the token in secure storage
+                  .then(() => {
+                    navigation.navigate('Home');
+                  });
+              });
           });
         } else {
           // Failed login

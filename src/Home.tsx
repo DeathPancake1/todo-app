@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import * as SecureStore from 'expo-secure-store';
 import {
   View,
   TextInput,
@@ -40,30 +41,39 @@ const Home = () => {
     });
   }, [navigation]);
 
-  const getTodos = () => {
-    // Make the HTTP POST request
-    fetch(`${BASE_URL}/todos`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email: userEmail }), // Pass email as an object
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Login failed');
-        }
+  const getTodos = async () => {
+    try {
+      // Retrieve the token from secure storage
+      const token = await SecureStore.getItemAsync('token');
+  
+      // Make the HTTP POST request with the token in the header
+      fetch(`${BASE_URL}/todos`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `${token}`,
+        },
+        body: JSON.stringify({ email: userEmail }),
       })
-      .then((data) => {
-        // Update the todos state with the retrieved todos
-        setTodos(data.todos);
-      })
-      .catch((error) => {
-        console.error(error);
-        Alert.alert('An error occurred');
-      });
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Login failed');
+          }
+        })
+        .then((data) => {
+          // Update the todos state with the retrieved todos
+          setTodos(data.todos);
+        })
+        .catch((error) => {
+          console.error(error);
+          Alert.alert('An error occurred');
+        });
+    } catch (error) {
+      console.error(error);
+      Alert.alert('An error occurred while retrieving the token');
+    }
   };
 
   useEffect(() => {
@@ -80,19 +90,20 @@ const Home = () => {
       });
   }, []);
 
-  const toggleTodoStatus = (id: number) => {
+  const toggleTodoStatus = async (id: number) => {
     const updatedTodos = todos.map((todo) => {
       if (todo.id === id) {
         return { ...todo, finished: !todo.finished };
       }
       return todo;
     });
-
+    const token = await SecureStore.getItemAsync('token');
     // Make the PUT request to update the todo on the server
     fetch(`${BASE_URL}/todos/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `${token}`,
       },
       body: JSON.stringify({ finished: updatedTodos.find((todo) => todo.id === id)?.finished }),
     })
@@ -136,16 +147,18 @@ const Home = () => {
     return 0; // both a and b have the same completion status
   });
 
-  const handleAddTodo = () => {
+  const handleAddTodo = async () => {
     if (!text) {
       Alert.alert('Please fill in Todo name');
       return;
     }
+    const token = await SecureStore.getItemAsync('token');
     // Make the POST request to add the todo on the server
     fetch(`${BASE_URL}/addTodo`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `${token}`,
       },
       body: JSON.stringify({ email: userEmail, todoName: text }),
     })
