@@ -13,7 +13,8 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-const BASE_URL = 'http://192.168.1.13:3000';
+const BASE_URL = '192.168.1.13';
+const PORT = '3000';
 
 type RootStackParamList = {
   Login: undefined;
@@ -45,7 +46,7 @@ const Home = () => {
       const token = await SecureStore.getItemAsync('token');
   
       // Make the HTTP POST request with the token in the header
-      fetch(`${BASE_URL}/todos`, {
+      fetch(`http://${BASE_URL}:${PORT}/todos`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,7 +87,7 @@ const Home = () => {
     });
     const token = await SecureStore.getItemAsync('token');
     // Make the PUT request to update the todo on the server
-    fetch(`${BASE_URL}/todos/${id}`, {
+    fetch(`http://${BASE_URL}:${PORT}/todos/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -141,7 +142,7 @@ const Home = () => {
     }
     const token = await SecureStore.getItemAsync('token');
     // Make the POST request to add the todo on the server
-    fetch(`${BASE_URL}/addTodo`, {
+    fetch(`http://${BASE_URL}:${PORT}/addTodo`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

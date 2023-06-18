@@ -9,7 +9,8 @@ type RootStackParamList = {
   Register: undefined;
   Home: undefined;
 };
-const BASE_URL = 'http://192.168.1.13:3000';
+const BASE_URL = '192.168.1.13';
+const PORT = 3000;
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
 const Login = () => {
@@ -38,7 +39,7 @@ const Login = () => {
     };
 
     // Make the HTTP POST request
-    fetch(`${BASE_URL}/login`, {
+    fetch(`http://${BASE_URL}:${PORT}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

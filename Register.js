@@ -26,7 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = __importStar(require("react"));
 const react_native_1 = require("react-native");
 const native_1 = require("@react-navigation/native");
-const BASE_URL = 'http://192.168.1.13:3000';
+const BASE_URL = '192.168.1.13';
+const PORT = 3000;
 const Register = () => {
     const [username, setUsername] = (0, react_1.useState)('');
     const [password, setPassword] = (0, react_1.useState)('');
@@ -55,7 +56,7 @@ const Register = () => {
             password: password,
         };
         // Make the HTTP POST request
-        fetch(`${BASE_URL}/register`, {
+        fetch(`http://${BASE_URL}:${PORT}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

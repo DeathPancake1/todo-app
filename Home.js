@@ -36,7 +36,8 @@ const react_1 = __importStar(require("react"));
 const SecureStore = __importStar(require("expo-secure-store"));
 const react_native_1 = require("react-native");
 const native_1 = require("@react-navigation/native");
-const BASE_URL = 'http://192.168.1.13:3000';
+const BASE_URL = '192.168.1.13';
+const PORT = '3000';
 const Home = () => {
     const [todos, setTodos] = (0, react_1.useState)([]);
     const [text, setText] = (0, react_1.useState)('');
@@ -51,7 +52,7 @@ const Home = () => {
             // Retrieve the token from secure storage
             const token = yield SecureStore.getItemAsync('token');
             // Make the HTTP POST request with the token in the header
-            fetch(`${BASE_URL}/todos`, {
+            fetch(`http://${BASE_URL}:${PORT}/todos`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -93,7 +94,7 @@ const Home = () => {
         });
         const token = yield SecureStore.getItemAsync('token');
         // Make the PUT request to update the todo on the server
-        fetch(`${BASE_URL}/todos/${id}`, {
+        fetch(`http://${BASE_URL}:${PORT}/todos/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -137,7 +138,7 @@ const Home = () => {
         }
         const token = yield SecureStore.getItemAsync('token');
         // Make the POST request to add the todo on the server
-        fetch(`${BASE_URL}/addTodo`, {
+        fetch(`http://${BASE_URL}:${PORT}/addTodo`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const BASE_URL = 'http://192.168.1.13:3000';
+const BASE_URL = '192.168.1.13';
+const PORT = 3000;
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -37,7 +38,7 @@ const Register = () => {
     };
 
     // Make the HTTP POST request
-    fetch(`${BASE_URL}/register`, {
+    fetch(`http://${BASE_URL}:${PORT}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
