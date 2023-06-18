@@ -83,7 +83,7 @@ const Register = () => {
             , autoCapitalize: "none" // Disable auto-capitalization
             , autoComplete: "email" // Enable email autocomplete
          }),
-        react_1.default.createElement(react_native_1.TextInput, { style: { height: 40, fontSize: 20 }, placeholder: "Username", value: username, onChangeText: (text) => setUsername(text) }),
+        react_1.default.createElement(react_native_1.TextInput, { style: { height: 40, fontSize: 20 }, placeholder: "Name", value: username, onChangeText: (text) => setUsername(text) }),
         react_1.default.createElement(react_native_1.TextInput, { style: { height: 40, fontSize: 20 }, placeholder: "Password", secureTextEntry: true, value: password, onChangeText: (text) => setPassword(text) }),
         react_1.default.createElement(react_native_1.TextInput, { style: { height: 40, fontSize: 20 }, placeholder: "Confirm Password", secureTextEntry: true, value: confirmPassword, onChangeText: (text) => setConfirmPassword(text) }),
         react_1.default.createElement(react_native_1.Button, { title: "Register", onPress: handleRegister })));

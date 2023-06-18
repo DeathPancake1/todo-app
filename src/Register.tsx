@@ -73,7 +73,7 @@ const Register = () => {
       />
       <TextInput
         style={{ height: 40, fontSize: 20 }}
-        placeholder="Username"
+        placeholder="Name"
         value={username}
         onChangeText={(text) => setUsername(text)}
       />
